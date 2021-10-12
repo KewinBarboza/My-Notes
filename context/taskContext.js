@@ -11,11 +11,12 @@ const INITIAL_TASKS = [
 
 export const TasksProvider = ({ children }) => {
   const [tasks, setTasks] = useState(INITIAL_TASKS)
-  const dateTask = '09/10/2021'
-  console.log(tasks)
-  const createTask = (title, description) => setTasks([...tasks, { title, description, id: uuid(), date: dateTask, state: 'sin iniciar' }])
+  const [optionTasksIsVisible, setOptionTasksIsVisible] = useState(false)
+
+  const showOptionTask = (id = null) => id ? setOptionTasksIsVisible(true) : setOptionTasksIsVisible(false)
+  const createTask = (title, description, date, state) => setTasks([...tasks, { title, description, id: uuid(), date, state }])
   const updateTask = (id, updateTask) => setTasks([...tasks.map(task => task.id === id ? { ...task, ...updateTask } : task)])
   const deleteTask = (id) => setTasks([...tasks.filter(task => task.id !== id)])
 
-  return <TaskContext.Provider value={{ tasks, createTask, updateTask, deleteTask }}>{children}</TaskContext.Provider>
+  return <TaskContext.Provider value={{ tasks, createTask, updateTask, deleteTask, showOptionTask, optionTasksIsVisible }}>{children}</TaskContext.Provider>
 }

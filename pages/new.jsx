@@ -4,14 +4,14 @@ import { useTasks } from "../hooks/useTasks";
 import { useRouter } from "next/router";
 
 export default function TasksFormPage() {
-	const [task, setTask] = useState({title:'', description:''})
+	const [task, setTask] = useState({title:'', description:'', date:'', state:''})
 	const {createTask, updateTask, tasks} = useTasks()
 	const {push, query} = useRouter()
 
 	useEffect(() => {
 		if (query.id) {
 			const taskFount = tasks.find(task => task.id === query.id)
-			setTask({title: taskFount.title, description: taskFount.description})
+			setTask({title: taskFount.title, description: taskFount.description, date: taskFount.date, state: taskFount.state})
 		}
 	}, [])
 
@@ -24,7 +24,8 @@ export default function TasksFormPage() {
 		e.preventDefault()
 
 		if (!query.id) {
-			createTask(task.title, task.description)
+			createTask(task.title, task.description, task.date, task.state)
+			console.log(task.title, task.description, task.date, task.state)
 		}else{
 			updateTask(query.id, task)
 		}
@@ -34,9 +35,26 @@ export default function TasksFormPage() {
 		<Layout>
 			<form className="mt-5 bg-gray-100" onSubmit={handleSubmit}>
 					<h1 className="text-center my-10 text-3xl font-bold">{!query.id ? 'Add new note' : 'Update note'}</h1>
+					<div className="flex justify-between">
+					<div className="w-80">
+						<label htmlFor="title" className="font-semibold">Title</label>
+						<input name="title" value={task.title} id="title" onChange={handleChange} className="shadow-md border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-gray-50 px-2 py-3 rounded-md w-full mb-5" placeholder="add title note" type="text" />
+					</div>
 
-					<label htmlFor="title" className="font-semibold">Title</label>
-					<input name="title" value={task.title} id="title" onChange={handleChange} className="shadow-md border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-gray-50 px-2 py-3 rounded-md w-full mb-5" placeholder="add title note" type="text" />
+					<div className="w-80">
+						<label htmlFor="date" className="font-semibold">Date</label>
+						<input name="date" value={task.date} id="date" onChange={handleChange} className="shadow-md border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-gray-50 px-2 py-3 rounded-md w-full mb-5" type="date" />
+					</div>
+
+					<div className="w-80">
+						<label htmlFor="state" className="font-semibold">State</label>
+						<select name="state" onChange={handleChange} id="state" className="shadow-md border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-gray-50 px-2 py-3 rounded-md w-full mb-5">
+							<option value="en curso">en curso</option>
+							<option value="finalizada">finalizada</option>
+							<option value="sin iniciar">sin iniciar</option>
+						</select>
+					</div>
+					</div>
 
 					<label htmlFor="description" className="font-semibold">Description</label>
 					<textarea 
