@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 export default function TasksFormPage() {
 	const [task, setTask] = useState({title:'', description:'', date:'', state:''})
-	const {createTask, updateTask, tasks} = useTasks()
+	const {createTask, updateTask, tasks, setOptionTasksIsVisible} = useTasks()
 	const {push, query} = useRouter()
 
 	useEffect(() => {
@@ -13,6 +13,7 @@ export default function TasksFormPage() {
 			const taskFount = tasks.find(task => task.id === query.id)
 			setTask({title: taskFount.title, description: taskFount.description, date: taskFount.date, state: taskFount.state})
 		}
+    setOptionTasksIsVisible(false)
 	}, [])
 
 	const handleChange = e => {
@@ -49,19 +50,19 @@ export default function TasksFormPage() {
 					<div className="w-80">
 						<label htmlFor="state" className="font-semibold">State</label>
 						<select name="state" onChange={handleChange} id="state" className="shadow-md border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-gray-50 px-2 py-3 rounded-md w-full mb-5">
-							<option value="en curso">en curso</option>
-							<option value="finalizada">finalizada</option>
-							<option value="sin iniciar">sin iniciar</option>
+							<option value="in progress">In progress</option>
+							<option value="finished">finished</option>
+							<option value="wait">Wait</option>
 						</select>
 					</div>
 					</div>
 
 					<label htmlFor="description" className="font-semibold">Description</label>
-					<textarea 
-						name="description" 
-						id="description" 
-						onChange={handleChange} 
-						className="shadow-md border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-gray-50 px-2 py-3 rounded-md w-full mb-5" 
+					<textarea
+						name="description"
+						id="description"
+						onChange={handleChange}
+						className="shadow-md border border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-gray-50 px-2 py-3 rounded-md w-full mb-5"
 						placeholder="add a description"
 						cols="30"
 						rows="10"
